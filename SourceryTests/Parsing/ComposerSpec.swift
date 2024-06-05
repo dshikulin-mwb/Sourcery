@@ -1126,6 +1126,21 @@ class ParserComposerSpec: QuickSpec {
                     }
 
                     describe("Updated composer") {
+
+                        it("Doesn't get into infinite cycle when typealias name equals to type name") {
+                            // See example of such typealis in Apple Foundation https://developer.apple.com/documentation/foundation/observableobject
+                            let code = """
+                                       typealias ObservableObject = ObservableObject
+                                       """
+
+                            waitUntil(timeout: .seconds(1), action: { done in
+                                DispatchQueue.global().async {
+                                    _ = parseTypealiases(code)
+                                    done()
+                                }
+                            })
+                        }
+
                         it("follows through typealias chain to final type") {
                             let code = """
                                        enum Bar {}

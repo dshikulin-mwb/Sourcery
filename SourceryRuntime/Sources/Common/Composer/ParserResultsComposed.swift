@@ -194,7 +194,8 @@ internal struct ParserResultsComposed {
         typealiasesByNames.forEach { _, alias in
             var aliasNamesToReplace = [alias.name]
             var finalAlias = alias
-            while let targetAlias = typealiasesByNames[finalAlias.typeName.name] {
+            while finalAlias.name != finalAlias.typeName.name,
+                let targetAlias = typealiasesByNames[finalAlias.typeName.name] {
                 aliasNamesToReplace.append(targetAlias.name)
                 finalAlias = targetAlias
             }
